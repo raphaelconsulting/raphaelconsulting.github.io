@@ -4,48 +4,92 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Building Envelope Estimating — Raphael Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Georgia', serif;
+    font-family: 'Montserrat', Arial, sans-serif;
     background: #FAFAF8;
     color: #1a1a1a;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
   }
-  /* HEADER */
+
+  /* ── HEADER ── */
+  .header-red-bar { height: 4px; background: #EE0000; width: 100%; }
   .header {
-    background: #000539;
-    color: white;
-    border-bottom: 4px solid #EE0000;
+    background: #FAFAF8;
+    border-bottom: 1px solid #E5E7EB;
   }
   .header-inner {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 32px 40px;
+    padding: 28px 40px;
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
   }
+  .header-wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+  .wordmark-raphael {
+    font-size: 13px;
+    font-weight: 800;
+    color: #EE0000;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .wordmark-consulting {
+    font-size: 10px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .header-divider {
+    width: 1px;
+    background: #E5E7EB;
+    align-self: stretch;
+    flex-shrink: 0;
+  }
+  .header-content { flex: 1; }
   .header-label {
-    font-size: 11px;
-    letter-spacing: 3px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: #EE0000;
-    margin-bottom: 8px;
-    font-family: 'Courier New', monospace;
+    margin-bottom: 6px;
+    font-weight: 700;
   }
   .header h1 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 8px;
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 6px;
     line-height: 1.2;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
   }
   .header p {
-    font-size: 15px;
-    color: #94A3B8;
-    max-width: 740px;
+    font-size: 13px;
+    color: #6B7280;
+    max-width: 640px;
+    line-height: 1.6;
   }
-  /* TABS */
+
+  /* ── TABS ── */
   .tabs-bar {
     background: white;
     border-bottom: 1px solid #E5E7EB;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
   .tabs-inner {
     max-width: 1180px;
@@ -55,25 +99,28 @@
     overflow-x: auto;
   }
   .tab-btn {
-    padding: 14px 24px;
+    padding: 14px 20px;
     border: none;
     background: none;
     cursor: pointer;
-    font-size: 13px;
-    font-family: 'Georgia', serif;
-    letter-spacing: 0.5px;
+    font-size: 11px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: #6B7280;
     border-bottom: 3px solid transparent;
     white-space: nowrap;
-    font-weight: 400;
     transition: all 0.15s;
   }
   .tab-btn.active {
-    color: #000539;
+    color: #1a1a1a;
     border-bottom-color: #EE0000;
     font-weight: 700;
   }
-  /* CONTENT */
+  .tab-btn:hover:not(.active) { color: #374151; }
+
+  /* ── CONTENT ── */
   .content {
     max-width: 1180px;
     margin: 0 auto;
@@ -82,13 +129,13 @@
   .view { display: none; }
   .view.active { display: block; }
 
-  /* TIME BAR */
+  /* ── TIME BAR ── */
   .time-bar-label {
-    font-size: 12px;
+    font-size: 10px;
     color: #6B7280;
     margin-bottom: 8px;
-    font-family: monospace;
-    letter-spacing: 1px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
   .time-bar {
@@ -103,12 +150,12 @@
     align-items: center;
     justify-content: center;
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     border-right: 1px solid white;
     transition: all 0.15s;
   }
-  .time-segment:hover { opacity: 0.85; }
+  .time-segment:hover { opacity: 0.8; }
   .legend {
     display: flex;
     gap: 16px;
@@ -123,20 +170,16 @@
     font-size: 11px;
     color: #6B7280;
   }
-  .legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-  }
+  .legend-dot { width: 12px; height: 12px; border-radius: 2px; }
 
-  /* STEP ROWS */
-  .steps-list { display: flex; flex-direction: column; gap: 8px; }
+  /* ── STEP ROWS ── */
+  .steps-list { display: flex; flex-direction: column; gap: 6px; }
   .step-row {
     display: grid;
-    grid-template-columns: 36px 1fr 120px 60px;
+    grid-template-columns: 36px 1fr 120px 56px;
     align-items: center;
     gap: 16px;
-    padding: 14px 20px;
+    padding: 12px 16px;
     background: white;
     border: 1px solid #E5E7EB;
     border-radius: 8px;
@@ -149,31 +192,32 @@
     width: 32px; height: 32px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700;
+    font-size: 12px; font-weight: 700;
   }
-  .step-name { font-size: 14px; font-weight: 600; }
-  .step-desc { font-size: 12px; color: #6B7280; margin-top: 2px; }
+  .step-name { font-size: 13px; font-weight: 700; }
+  .step-desc { font-size: 11px; color: #6B7280; margin-top: 2px; line-height: 1.4; }
   .step-who { font-size: 11px; color: #6B7280; text-align: right; }
   .step-pct { font-size: 13px; font-weight: 700; text-align: right; }
   .step-detail {
     display: none;
-    margin: 4px 0 8px 0;
+    margin: 2px 0 6px 0;
     padding: 20px 24px;
     background: white;
     border-radius: 8px;
-    border-top: 3px solid var(--ai-border);
     border: 1px solid var(--ai-border);
+    border-top: 3px solid var(--ai-border);
   }
   .step-detail.open { display: block; }
   .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .detail-label {
-    font-size: 11px;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
     color: #6B7280;
     margin-bottom: 8px;
   }
-  .detail-item { font-size: 13px; color: #374151; padding: 3px 0; }
+  .detail-item { font-size: 12px; color: #374151; padding: 3px 0; line-height: 1.4; }
   .ai-note {
     font-size: 13px;
     padding: 12px 16px;
@@ -183,182 +227,404 @@
     background: var(--ai-bg);
     color: var(--ai-text);
   }
-  .tools-note { margin-top: 12px; font-size: 12px; color: #6B7280; }
+  .tools-note { margin-top: 10px; font-size: 11px; color: #6B7280; }
 
-  /* 80/20 VIEW */
+  /* ── 80/20 VIEW ── */
   .verdict-box {
-    background: #000539;
+    background: #1a1a1a;
     color: white;
-    padding: 24px 28px;
-    border-radius: 10px;
+    padding: 22px 28px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    border-left: 4px solid #EE0000;
+  }
+  .verdict-box h2 { font-size: 17px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .verdict-box p { font-size: 14px; color: #CBD5E1; line-height: 1.6; }
+  .three-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  .metric-card { border-radius: 8px; padding: 20px; border: 2px solid; }
+  .metric-tag { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .metric-name { font-size: 20px; font-weight: 800; }
+  .metric-pct { font-size: 40px; font-weight: 800; margin: 6px 0; letter-spacing: -0.02em; }
+  .metric-desc { font-size: 12px; line-height: 1.5; }
+  .metric-why { margin-top: 12px; padding: 10px 12px; background: white; border-radius: 6px; font-size: 11px; line-height: 1.5; }
+
+  /* ── ROI MATRIX ── */
+  .matrix-section {
     margin-bottom: 28px;
   }
-  .verdict-box h2 { font-size: 20px; margin-bottom: 12px; }
-  .verdict-box p { font-size: 15px; color: #CBD5E1; line-height: 1.6; }
-  .three-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-  .metric-card { border-radius: 10px; padding: 20px; border: 2px solid; }
-  .metric-tag { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
-  .metric-name { font-size: 22px; font-weight: 700; }
-  .metric-pct { font-size: 32px; font-weight: 700; margin: 8px 0; }
-  .metric-desc { font-size: 13px; line-height: 1.5; }
-  .metric-why { margin-top: 12px; padding: 10px 12px; background: white; border-radius: 6px; font-size: 12px; }
+  .matrix-section-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #EE0000;
+    margin-bottom: 12px;
+  }
+  .matrix-wrap {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0;
+  }
+  .matrix-y-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6B7280;
+  }
+  .matrix-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .matrix-axis-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding-left: 0;
+    margin-bottom: 4px;
+  }
+  .matrix-axis-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9CA3AF;
+    text-align: center;
+  }
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 6px;
+  }
+  .matrix-quadrant {
+    border-radius: 8px;
+    padding: 18px 20px;
+    border: 2px solid;
+    min-height: 190px;
+    position: relative;
+  }
+  .q-number {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+    margin-bottom: 4px;
+  }
+  .q-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 3px;
+    letter-spacing: -0.01em;
+  }
+  .q-subtitle {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .q-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .q-step-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    background: white;
+    cursor: default;
+    transition: transform 0.1s;
+  }
+  .q-step-chip:hover { transform: scale(1.05); }
+  .q-step-num {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+  }
+  .matrix-axis-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 4px 0;
+  }
+  .matrix-axis-bottom span {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+  }
+  .matrix-x-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6B7280;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .q-budget-trap {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #B91C1C;
+  }
+
+  /* ── V1 OUTPUT ── */
   .v1-output {
     background: #FFF7ED;
     border: 2px solid #EA580C;
-    border-radius: 10px;
-    padding: 24px 28px;
+    border-radius: 8px;
+    padding: 22px 28px;
   }
-  .v1-output h3 { font-size: 16px; font-weight: 700; color: #9A3412; margin-bottom: 12px; }
-  .v1-output p { font-size: 14px; color: #7C2D12; line-height: 1.6; margin-bottom: 12px; }
-  .v1-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .v1-output h3 { font-size: 15px; font-weight: 800; color: #9A3412; margin-bottom: 10px; }
+  .v1-output p { font-size: 13px; color: #7C2D12; line-height: 1.6; margin-bottom: 12px; }
+  .v1-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .v1-item {
     padding: 10px 14px;
     background: white;
     border-radius: 6px;
     font-size: 12px;
+    line-height: 1.4;
     border: 1px solid #FED7AA;
   }
   .v1-check { color: #EA580C; font-weight: 700; }
   .v1-footer {
-    margin-top: 16px;
+    margin-top: 14px;
     padding: 12px 16px;
     background: #FEF3C7;
     border-radius: 6px;
-    font-size: 13px;
+    font-size: 12px;
     color: #92400E;
-    font-weight: 500;
+    font-weight: 600;
   }
 
-  /* AI MAP VIEW */
+  /* ── AI MAP VIEW ── */
   .map-header { margin-bottom: 24px; }
-  .map-header h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-  .map-header p { font-size: 14px; color: #6B7280; }
+  .map-header h2 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .map-header p { font-size: 13px; color: #6B7280; }
   .map-section-label {
-    font-size: 12px;
-    letter-spacing: 2px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     font-weight: 700;
     margin-bottom: 8px;
-    font-family: monospace;
+    font-family: 'Montserrat', Arial, sans-serif;
   }
   .map-row {
     display: grid;
-    grid-template-columns: 36px 1fr 60px;
+    grid-template-columns: 36px 1fr 56px;
     align-items: start;
     gap: 16px;
-    padding: 16px 20px;
+    padding: 14px 18px;
     border-radius: 8px;
     margin-bottom: 8px;
-    cursor: pointer;
   }
   .map-num {
     width: 32px; height: 32px;
     border-radius: 50%;
     color: white;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700;
+    font-size: 12px; font-weight: 700;
     flex-shrink: 0;
   }
-  .map-name { font-size: 14px; font-weight: 600; }
+  .map-name { font-size: 13px; font-weight: 700; }
   .map-note { font-size: 12px; margin-top: 4px; line-height: 1.5; }
   .map-v1-approach {
     margin-top: 8px;
     padding: 8px 12px;
     background: white;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 11px;
     color: #1a1a1a;
     border: 1px solid #FECACA;
+    line-height: 1.4;
   }
-  .map-pct { font-size: 13px; font-weight: 700; text-align: right; }
+  .map-pct { font-size: 14px; font-weight: 700; text-align: right; padding-top: 4px; }
   .map-total {
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
     text-align: right;
     margin-bottom: 24px;
   }
   .amplify-box {
     background: #EFF6FF;
     border: 1px solid #3B82F6;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 20px 24px;
   }
-  .amplify-box h3 { font-size: 15px; font-weight: 700; color: #1E40AF; margin-bottom: 10px; }
+  .amplify-box h3 { font-size: 14px; font-weight: 800; color: #1E40AF; margin-bottom: 8px; }
   .amplify-box p { font-size: 13px; color: #1E3A5F; line-height: 1.6; }
 
-  /* DIVISIONS VIEW */
+  /* ── DIVISIONS VIEW ── */
   .divisions-header {
-    background: #000539;
+    background: #1a1a1a;
     color: white;
-    padding: 24px 28px;
-    border-radius: 10px;
-    margin-bottom: 28px;
-  }
-  .divisions-header h2 { font-size: 20px; margin-bottom: 12px; }
-  .divisions-header p { font-size: 15px; color: #CBD5E1; line-height: 1.6; }
-  .shared-workflow-label {
-    font-size: 12px; color: #6B7280; margin-bottom: 8px;
-    font-family: monospace; letter-spacing: 1px; text-transform: uppercase;
-  }
-  .workflow-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 28px; }
-  .workflow-chip {
-    padding: 8px 12px;
+    padding: 22px 28px;
     border-radius: 6px;
-    font-size: 11px;
+    margin-bottom: 24px;
+    border-left: 4px solid #EE0000;
+  }
+  .divisions-header h2 { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+  .divisions-header p { font-size: 13px; color: #CBD5E1; line-height: 1.6; }
+  .shared-workflow-label {
+    font-size: 10px;
+    color: #6B7280;
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .workflow-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 24px; }
+  .workflow-chip {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 10px;
     font-weight: 600;
     border: 1px solid;
+    white-space: nowrap;
   }
   .division-card {
-    display: grid;
-    grid-template-columns: 48px 1fr;
+    display: flex;
     gap: 16px;
-    padding: 20px 24px;
+    padding: 16px 20px;
     background: white;
     border: 1px solid #E5E7EB;
-    border-radius: 10px;
-    margin-bottom: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
   }
-  .division-icon { font-size: 32px; text-align: center; padding-top: 4px; }
-  .division-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .division-icon { font-size: 28px; padding-top: 2px; }
+  .division-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
   .division-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .division-field-label {
-    font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
-    color: #6B7280; margin-bottom: 2px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: #6B7280;
+    margin-bottom: 2px;
   }
-  .division-field-val { font-size: 12px; color: #374151; }
+  .division-field-val { font-size: 12px; color: #374151; line-height: 1.4; }
   .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-  .build-card { border-radius: 10px; padding: 20px 24px; border: 1px solid; }
-  .build-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
-  .build-item { font-size: 13px; line-height: 1.7; }
+  .build-card { border-radius: 8px; padding: 20px; border: 2px solid; }
+  .build-card h3 { font-size: 13px; font-weight: 800; margin-bottom: 12px; }
+  .build-item { padding: 5px 0; font-size: 12px; border-bottom: 1px solid rgba(0,0,0,0.06); line-height: 1.4; }
+  .build-item:last-child { border-bottom: none; }
   .compound-box {
     background: #EFF6FF;
     border: 1px solid #3B82F6;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 20px 24px;
   }
-  .compound-box h3 { font-size: 15px; font-weight: 700; color: #1E40AF; margin-bottom: 8px; }
+  .compound-box h3 { font-size: 14px; font-weight: 800; color: #1E40AF; margin-bottom: 8px; }
   .compound-box p { font-size: 13px; color: #1E3A5F; line-height: 1.6; }
 
+  /* ── CONTACT BUTTON ── */
+  .contact-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #EE0000;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 40px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(238,0,0,0.3);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .contact-btn:hover {
+    background: #CC0000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(238,0,0,0.4);
+  }
+  .contact-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .contact-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    color: #374151;
+    padding: 8px 14px;
+    border-radius: 40px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid #E5E7EB;
+    transition: all 0.15s;
+  }
+  .contact-email:hover { border-color: #9CA3AF; transform: translateY(-1px); }
+
+  /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
-    .header-inner, .tabs-inner, .content { padding: 20px; }
-    .three-cols, .two-cols, .detail-grid, .v1-grid { grid-template-columns: 1fr; }
-    .step-row { grid-template-columns: 32px 1fr 50px; }
+    .header-inner { padding: 20px; flex-direction: column; gap: 12px; }
+    .header-divider { display: none; }
+    .header h1 { font-size: 20px; }
+    .tabs-inner, .content { padding-left: 20px; padding-right: 20px; }
+    .three-cols, .two-cols, .detail-grid, .v1-grid, .matrix-grid { grid-template-columns: 1fr; }
+    .matrix-grid { grid-template-rows: auto; }
+    .step-row { grid-template-columns: 32px 1fr 48px; }
     .step-who { display: none; }
+    .contact-fab { bottom: 16px; right: 16px; }
+    .matrix-wrap { grid-template-columns: 1fr; }
+    .matrix-y-label { display: none; }
   }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
+<div class="header-red-bar"></div>
 <div class="header">
   <div class="header-inner">
-    <div class="header-label">Raphael Consulting</div>
-    <h1>Building Envelope Estimating — The Full Process</h1>
-    <p>15-step bid workflow for specialty subcontractors. Where time goes, where AI creates leverage, and where the biggest opportunities live to increase bid capacity without adding headcount.</p>
+    <div class="header-wordmark">
+      <span class="wordmark-raphael">Raphael</span>
+      <span class="wordmark-consulting">Consulting</span>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-content">
+      <div class="header-label">AI in Estimating — Analysis</div>
+      <h1>Building Envelope Estimating</h1>
+      <p>15-step bid workflow for specialty subcontractors. Where time goes, where AI creates leverage, and where the biggest opportunities live to increase bid capacity without adding headcount.</p>
+    </div>
   </div>
 </div>
 
+<!-- TABS -->
 <div class="tabs-bar">
   <div class="tabs-inner">
     <button class="tab-btn active" onclick="switchTab('process')">Full Process</button>
@@ -370,15 +636,15 @@
 
 <div class="content">
 
-  <!-- PROCESS VIEW -->
+  <!-- FULL PROCESS VIEW -->
   <div id="view-process" class="view active">
-    <div class="time-bar-label">Estimator Time Distribution (% of total bid effort)</div>
+    <div class="time-bar-label">Estimator Time Distribution (% of Total Bid Effort)</div>
     <div class="time-bar" id="time-bar"></div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#DCFCE7;border:1px solid #16A34A"></div>🎯 High AI Value</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#FEF9C3;border:1px solid #CA8A04"></div>⚡ Medium — Needs Data</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#F3F4F6;border:1px solid #9CA3AF"></div>Low AI Value</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#FEE2E2;border:1px solid #DC2626"></div>⚠️ Needs Careful Approach</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#DCFCE7;border:1px solid #16A34A"></div> High AI Value</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FEF9C3;border:1px solid #CA8A04"></div> Medium — Needs Data</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#F3F4F6;border:1px solid #9CA3AF"></div> Low AI Value</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FEE2E2;border:1px solid #DC2626"></div> Needs Careful Approach</div>
     </div>
     <div class="steps-list" id="steps-list"></div>
   </div>
@@ -389,29 +655,87 @@
       <h2>The 80/20 Verdict</h2>
       <p>The highest-leverage AI opportunity is <strong style="color:#4ADE80">Scope Identification + System Classification + Qualifications</strong> — the steps where domain expertise determines whether the bid is right or wrong <em>before a single number gets calculated</em>. Getting the scope wrong means every number downstream is wrong too.</p>
     </div>
+
     <div class="three-cols">
       <div class="metric-card" style="background:#DCFCE7;border-color:#16A34A">
         <div class="metric-tag" style="color:#15803D">🎯 Highest Leverage — V1</div>
         <div class="metric-name" style="color:#15803D">Scope + Quals</div>
-        <div class="metric-pct" style="color:#15803D" id="scope-pct">41%</div>
+        <div class="metric-pct" style="color:#15803D" id="scope-pct">—</div>
         <div class="metric-desc" style="color:#166534">of estimator time. Drawing classification, spec extraction, system classification, qualifications. <strong>Wrong scope = wrong bid = margin loss.</strong> Highly automatable with trade-specific AI.</div>
         <div class="metric-why"><strong>Why this matters:</strong> General AI can OCR a PDF. It can't tell you that a "storefront with thermal break" on a 30-story tower is probably mis-specified and should be curtain wall. Trade intelligence is the differentiator.</div>
       </div>
       <div class="metric-card" style="background:#FEE2E2;border-color:#DC2626">
         <div class="metric-tag" style="color:#B91C1C">⚠️ High Value, Needs Care</div>
         <div class="metric-name" style="color:#B91C1C">Quantity Takeoff</div>
-        <div class="metric-pct" style="color:#B91C1C" id="takeoff-pct">26%</div>
+        <div class="metric-pct" style="color:#B91C1C" id="takeoff-pct">—</div>
         <div class="metric-desc" style="color:#991B1B">of estimator time. When schedules exist, AI extracts tabular data with high accuracy. When they don't, this is where bad assumptions happen.</div>
         <div class="metric-why"><strong>The rule:</strong> Extract what you CAN with confidence. Flag everything else for manual verification. Transparent uncertainty beats wrong numbers.</div>
       </div>
       <div class="metric-card" style="background:#F3F4F6;border-color:#9CA3AF">
         <div class="metric-tag" style="color:#6B7280">Phase 2+ — Needs Data Foundation</div>
         <div class="metric-name" style="color:#4B5563">Pricing + History</div>
-        <div class="metric-pct" style="color:#4B5563" id="pricing-pct">33%</div>
+        <div class="metric-pct" style="color:#4B5563" id="pricing-pct">—</div>
         <div class="metric-desc" style="color:#374151">of estimator time. Material pricing, labor, assembly, review. These benefit enormously from historical benchmarking — but require structured bid history data.</div>
         <div class="metric-why"><strong>The compounding effect:</strong> Every bid processed through the system builds the historical database that makes future bids faster and more accurate.</div>
       </div>
     </div>
+
+    <!-- ROI MATRIX -->
+    <div class="matrix-section">
+      <div class="matrix-section-label">Automation Priority Matrix — Where to Start and What to Skip</div>
+      <div class="matrix-wrap">
+        <div class="matrix-y-label">↑ Impact &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="matrix-inner">
+          <div class="matrix-axis-top">
+            <div class="matrix-axis-label">Low Effort</div>
+            <div class="matrix-axis-label">High Effort</div>
+          </div>
+          <div class="matrix-grid">
+
+            <!-- Q1: Automate NOW — High Impact, Low Effort -->
+            <div class="matrix-quadrant" style="background:#F0FDF4;border-color:#16A34A">
+              <div class="q-number" style="color:#15803D">01</div>
+              <div class="q-title" style="color:#15803D">Automate NOW</div>
+              <div class="q-subtitle" style="color:#16A34A">Quick wins. Start here every time.</div>
+              <div class="q-steps" id="q-now"></div>
+            </div>
+
+            <!-- Q2: Plan & Build — High Impact, High Effort -->
+            <div class="matrix-quadrant" style="background:#EFF6FF;border-color:#3B82F6">
+              <div class="q-budget-trap">↓ Worth the Investment</div>
+              <div class="q-number" style="color:#1E40AF">02</div>
+              <div class="q-title" style="color:#1E40AF">Plan & Build</div>
+              <div class="q-subtitle" style="color:#3B82F6">High value. Scope it properly.</div>
+              <div class="q-steps" id="q-build"></div>
+            </div>
+
+            <!-- Q3: Automate Later — Low Impact, Low Effort -->
+            <div class="matrix-quadrant" style="background:#FEF9C3;border-color:#CA8A04">
+              <div class="q-number" style="color:#A16207">03</div>
+              <div class="q-title" style="color:#A16207">Automate Later</div>
+              <div class="q-subtitle" style="color:#CA8A04">Nice-to-haves. Backlog these.</div>
+              <div class="q-steps" id="q-later"></div>
+            </div>
+
+            <!-- Q4: Skip It — Low Impact, High Effort -->
+            <div class="matrix-quadrant" style="background:#FEF2F2;border-color:#DC2626">
+              <div class="q-budget-trap">↑ The Budget Trap</div>
+              <div class="q-number" style="color:#B91C1C">04</div>
+              <div class="q-title" style="color:#B91C1C">Skip It</div>
+              <div class="q-subtitle" style="color:#DC2626">Complex builds, minimal return.</div>
+              <div class="q-steps" id="q-skip"></div>
+            </div>
+
+          </div>
+          <div class="matrix-axis-bottom">
+            <span>← Low Effort</span>
+            <span>High Effort →</span>
+          </div>
+          <div class="matrix-x-label">E F F O R T</div>
+        </div>
+      </div>
+    </div>
+
     <div class="v1-output">
       <h3>What the V1 Output Looks Like</h3>
       <p>Upload an architectural PDF set. In 15 minutes instead of 4+ hours, receive a <strong>structured scope intelligence report</strong>:</p>
@@ -449,8 +773,8 @@
   <!-- DIVISIONS VIEW -->
   <div id="view-divisions" class="view">
     <div class="divisions-header">
-      <h2>One Workflow. Five Divisions.</h2>
-      <p>Every estimator across the group follows the same 15-step workflow. The trade knowledge differs — but the process, the pain points, and the AI opportunity are the same. A platform built for one division extends to all of them.</p>
+      <h2>One Workflow. Multiple Divisions.</h2>
+      <p>Every estimator across the company follows the same 15-step workflow. The trade knowledge differs — but the process, the pain points, and the AI opportunity are the same. A platform built for one division extends to all of them.</p>
     </div>
     <div class="shared-workflow-label">Shared Workflow — Same Across All Divisions</div>
     <div class="workflow-chips" id="workflow-chips"></div>
@@ -483,10 +807,26 @@
     </div>
     <div class="compound-box">
       <h3>The Compounding Effect</h3>
-      <p>Building this for one division creates the foundation for all of them. The core engine (PDF classification, spec parsing, qualification generation) is trade-agnostic. The trade-specific intelligence (system classification, checklist logic, standards) is a configuration layer. Start with one division, prove the model, then extend across the group — each rollout is faster than the last because the platform already exists.</p>
+      <p>Building this for one division creates the foundation for all of them. The core engine (PDF classification, spec parsing, qualification generation) is trade-agnostic. The trade-specific intelligence (system classification, checklist logic, standards) is a configuration layer. Start with one division, prove the model, then extend across the company — each rollout is faster than the last because the platform already exists.</p>
     </div>
   </div>
 
+</div>
+
+<!-- CONTACT BUTTON -->
+<div class="contact-fab">
+  <a href="https://outlook.office.com/bookwithme/user/d9176feb33f4411a8ee3649e80ab41cb%40raphaelconsulting.ca?anonymous&ismsaljsauthenabled" target="_blank" class="contact-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+    Book a Call
+  </a>
+  <a href="mailto:rami@raphaelconsulting.ca" class="contact-email">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+    </svg>
+    rami@raphaelconsulting.ca
+  </a>
 </div>
 
 <script>
@@ -497,30 +837,49 @@ const AI = {
   difficult: { bg:'#FEE2E2', border:'#DC2626', text:'#B91C1C', label:'⚠️ Needs Careful Approach' }
 };
 
+// Matrix quadrant assignment: q1=now, q2=build, q3=later, q4=skip
+const MATRIX = {
+  3:  { q:'now',   reason:'Drawing classification — high impact, fast to build' },
+  4:  { q:'now',   reason:'Spec extraction — structured text, high accuracy achievable' },
+  5:  { q:'now',   reason:'System classification — encodes domain expertise directly' },
+  10: { q:'now',   reason:'Qualifications — pure domain logic, one of the highest-value outputs' },
+  6:  { q:'now',   reason:'Schedule takeoff — tabular data extraction, AI handles this well' },
+  7:  { q:'build', reason:'Drawing takeoff — high value but requires careful handling of uncertainty' },
+  2:  { q:'build', reason:'Go/No-Go screening — valuable once bid history is structured' },
+  15: { q:'build', reason:'Handoff package — high downstream ROI, requires structured data' },
+  8:  { q:'build', reason:'Material pricing — powerful once supplier data is digitized' },
+  9:  { q:'build', reason:'Labor estimation — requires historical project data to be accurate' },
+  12: { q:'build', reason:'Internal review — benchmarking needs bid history data' },
+  1:  { q:'later', reason:'Bid routing/notification — admin, low value in V1' },
+  11: { q:'later', reason:'Bid assembly — mostly spreadsheet math, low complexity' },
+  13: { q:'later', reason:'Submission packaging — administrative' },
+  14: { q:'skip',  reason:'Negotiation — human relationship work, AI can\'t replace this' },
+};
+
 const STEPS = [
-  { id:1, phase:'INTAKE', name:'Bid Invitation Received', description:'ITB from GC/developer lands. Spec package, drawings, timeline, bonding requirements.', timePercent:2, who:'Sales / Estimator', tools:'Email, phone', ai:'low', aiNote:'Simple routing/notification — low automation value in V1.', details:['Receive invitation to bid (ITB) from GC or developer','Initial package: architectural drawings (PDF), specs, project schedule, bid form','Log opportunity in tracker (if one exists)'] },
-  { id:2, phase:'INTAKE', name:'Go / No-Go Decision', description:'Quick triage: Is this our market? Capacity? Timeline? Margin potential? Bonding?', timePercent:3, who:'VP / Senior Estimator', tools:'Gut feel, spreadsheet', ai:'medium', aiNote:'AI can pre-screen bid invitations against historical win criteria, project type fit, and current capacity. Requires structured bid history data.', details:['Assess project type fit (low-rise vs high-rise, system types)','Check current capacity — can we deliver on this timeline?','Quick margin sniff — is this worth pursuing?','Bonding / insurance requirements check','Decision: bid, no-bid, or bid with conditions'] },
-  { id:3, phase:'SCOPE', name:'Drawing Set Review & Classification', description:'Open the 100–500 page PDF set. Find the relevant drawings. Identify what\'s there and what\'s missing.', timePercent:15, who:'Estimator', tools:'Bluebeam/Adobe, manual review', ai:'high', aiNote:'Classify drawings by type (elevation, plan, section, detail, schedule). Extract drawing index. Flag missing elevations, missing schedules, incomplete information. This is reading & classifying — AI\'s strongest capability.', details:['Open architectural PDF set (often 100–500+ pages)','Identify drawing index / table of contents','Find trade-relevant sheets: elevations, floor plans, sections, details, schedules','Classify each relevant drawing by type and content','Flag what\'s MISSING: elevations not shown, incomplete schedules, contradictory details','Note drawing scale, revision dates, and any addenda'] },
-  { id:4, phase:'SCOPE', name:'Specification Extraction', description:'Read spec sections. Extract performance requirements, approved products, testing standards.', timePercent:10, who:'Estimator', tools:'PDF reader, manual notes', ai:'high', aiNote:'Parse spec sections, extract performance criteria, approved manufacturers, testing requirements, warranty terms. Structured text extraction from known document formats — high accuracy achievable.', details:['Identify relevant spec sections (e.g. Division 07, Division 08)','Extract: performance criteria (air, water, structural, thermal)','Extract: approved manufacturers and products','Extract: testing standards (AAMA, ASTM, CSA, NRCA, etc.)','Extract: warranty requirements','Flag conflicts between specs and drawings'] },
-  { id:5, phase:'SCOPE', name:'System Classification & Scope Definition', description:'Determine: what systems are we bidding? What\'s included vs. adjacent trades? What are the scope boundaries?', timePercent:8, who:'Senior Estimator / VP', tools:'Domain knowledge, spec + drawings', ai:'high', aiNote:'This is where deep trade knowledge matters most. Classify systems by type, identify specialty items, define scope boundaries. General AI tools can\'t do this — it requires encoded domain expertise specific to each trade.', details:['Classify building envelope systems present in the project','Determine performance tier and specification requirements per system','Identify specialty items, accessories, and interface conditions','Note interface requirements with adjacent trades','Define scope boundaries: what\'s included vs. excluded'] },
-  { id:6, phase:'TAKEOFF', name:'Quantity Takeoff — From Schedules', description:'If schedules exist: extract types, quantities, sizes, and specs from the tabular data.', timePercent:8, who:'Estimator', tools:'Bluebeam, Excel, manual', ai:'high', aiNote:'When schedules exist, this is tabular data extraction — AI handles this with high accuracy. Extract type marks, quantities, sizes, materials, hardware, and remarks. Cross-reference against drawings to catch discrepancies.', details:['Locate schedules in the drawing set (window, door, panel, etc.)','Extract per type: mark, quantity, dimensions, material, accessories','Cross-reference schedule against elevations (do all marks appear?)','Flag discrepancies: schedule says 12 of Type A, but only 10 visible','Note any \'TBD\' or \'by others\' items in schedule'] },
-  { id:7, phase:'TAKEOFF', name:'Quantity Takeoff — From Drawings', description:'When schedules are incomplete or missing: manually count and measure from elevations, plans, and details.', timePercent:18, who:'Estimator', tools:'Bluebeam (calibrated), manual counting', ai:'difficult', aiNote:'The hardest step for AI. Measuring from architectural PDFs requires calibrated scale, identifying boundaries in elevation drawings, and handling varying drawing quality. V1 approach: extract what can be identified with confidence, explicitly flag everything else for manual verification. Transparent uncertainty beats wrong numbers.', details:['Calibrate scale in Bluebeam per drawing','Count and measure from elevations, per floor','Calculate total areas (sqft/sqm) per system','Identify and count specialty items','Calculate linear footage where applicable','Document all assumptions made where drawings are unclear','THIS IS THE STEP WHERE ASSUMPTIONS CAUSE PROBLEMS'] },
-  { id:8, phase:'PRICING', name:'Material Pricing', description:'Price materials based on quantities and system selections. Request supplier quotes where needed.', timePercent:10, who:'Estimator', tools:'Supplier quotes, price lists, Excel', ai:'medium', aiNote:'AI can pull from historical pricing databases and flag when current quotes deviate from benchmarks. Requires supplier pricing data to be digitized. Phase 2 opportunity.', details:['Request quotes from suppliers based on material specs','Price primary materials per system','Price accessories, sealants, fasteners, hardware','Apply waste/scrap factors','Factor in freight and delivery'] },
-  { id:9, phase:'PRICING', name:'Labor Estimation', description:'Estimate shop fabrication hours and/or field installation hours per system type.', timePercent:8, who:'Senior Estimator', tools:'Historical rates, experience, Excel', ai:'medium', aiNote:'AI can suggest labor rates from historical project data. Requires structured data from past projects — a strong use case once bid history is digitized.', details:['Fabrication/shop labor hours per unit type (from historical data)','Field installation labor hours per unit type','Apply crew rates and productivity factors','Factor in site conditions: height, access, equipment needs','Include mobilization/demobilization, protection, cleanup'] },
+  { id:1,  phase:'INTAKE',        name:'Bid Invitation Received',           description:'ITB from GC/developer lands. Spec package, drawings, timeline, bonding requirements.',                              timePercent:2,  who:'Sales / Estimator',          tools:'Email, phone',                           ai:'low',       aiNote:'Simple routing/notification — low automation value in V1.',                                                                                                                                                                                                          details:['Receive invitation to bid (ITB) from GC or developer','Initial package: architectural drawings (PDF), specs, project schedule, bid form','Log opportunity in tracker (if one exists)'] },
+  { id:2,  phase:'INTAKE',        name:'Go / No-Go Decision',               description:'Quick triage: Is this our market? Capacity? Timeline? Margin potential? Bonding?',                                    timePercent:3,  who:'VP / Senior Estimator',      tools:'Gut feel, spreadsheet',                  ai:'medium',    aiNote:'AI can pre-screen bid invitations against historical win criteria, project type fit, and current capacity. Requires structured bid history data.',                                                                                                                    details:['Assess project type fit (low-rise vs high-rise, system types)','Check current capacity — can we deliver on this timeline?','Quick margin sniff — is this worth pursuing?','Bonding / insurance requirements check','Decision: bid, no-bid, or bid with conditions'] },
+  { id:3,  phase:'SCOPE',         name:'Drawing Set Review & Classification',description:'Open the 100–500 page PDF set. Find the relevant drawings. Identify what\'s there and what\'s missing.',            timePercent:15, who:'Estimator',                   tools:'Bluebeam/Adobe, manual review',           ai:'high',      aiNote:'Classify drawings by type (elevation, plan, section, detail, schedule). Extract drawing index. Flag missing elevations, missing schedules, incomplete information. This is reading & classifying — AI\'s strongest capability.',                                      details:['Open architectural PDF set (often 100–500+ pages)','Identify drawing index / table of contents','Find trade-relevant sheets: elevations, floor plans, sections, details, schedules','Classify each relevant drawing by type and content','Flag what\'s MISSING: elevations not shown, incomplete schedules, contradictory details','Note drawing scale, revision dates, and any addenda'] },
+  { id:4,  phase:'SCOPE',         name:'Specification Extraction',          description:'Read spec sections. Extract performance requirements, approved products, testing standards.',                           timePercent:10, who:'Estimator',                   tools:'PDF reader, manual notes',               ai:'high',      aiNote:'Parse spec sections, extract performance criteria, approved manufacturers, testing requirements, warranty terms. Structured text extraction from known document formats — high accuracy achievable.',                                                                 details:['Identify relevant spec sections (e.g. Division 07, Division 08)','Extract: performance criteria (air, water, structural, thermal)','Extract: approved manufacturers and products','Extract: testing standards (AAMA, ASTM, CSA, NRCA, etc.)','Extract: warranty requirements','Flag conflicts between specs and drawings'] },
+  { id:5,  phase:'SCOPE',         name:'System Classification & Scope Definition', description:'Determine: what systems are we bidding? What\'s included vs. adjacent trades? What are the scope boundaries?', timePercent:8,  who:'Senior Estimator / VP',      tools:'Domain knowledge, spec + drawings',      ai:'high',      aiNote:'This is where deep trade knowledge matters most. Classify systems by type, identify specialty items, define scope boundaries. General AI tools can\'t do this — it requires encoded domain expertise specific to each trade.',                                         details:['Classify building envelope systems present in the project','Determine performance tier and specification requirements per system','Identify specialty items, accessories, and interface conditions','Note interface requirements with adjacent trades','Define scope boundaries: what\'s included vs. excluded'] },
+  { id:6,  phase:'TAKEOFF',       name:'Quantity Takeoff — From Schedules', description:'If schedules exist: extract types, quantities, sizes, and specs from the tabular data.',                               timePercent:8,  who:'Estimator',                   tools:'Bluebeam, Excel, manual',                ai:'high',      aiNote:'When schedules exist, this is tabular data extraction — AI handles this with high accuracy. Extract type marks, quantities, sizes, materials, hardware, and remarks. Cross-reference against drawings to catch discrepancies.',                                           details:['Locate schedules in the drawing set (window, door, panel, etc.)','Extract per type: mark, quantity, dimensions, material, accessories','Cross-reference schedule against elevations (do all marks appear?)','Flag discrepancies: schedule says 12 of Type A, but only 10 visible','Note any \'TBD\' or \'by others\' items in schedule'] },
+  { id:7,  phase:'TAKEOFF',       name:'Quantity Takeoff — From Drawings',  description:'When schedules are incomplete or missing: manually count and measure from elevations, plans, and details.',          timePercent:18, who:'Estimator',                   tools:'Bluebeam (calibrated), manual counting',  ai:'difficult', aiNote:'The hardest step for AI. Measuring from architectural PDFs requires calibrated scale, identifying boundaries in elevation drawings, and handling varying drawing quality. V1 approach: extract what can be identified with confidence, explicitly flag everything else for manual verification. Transparent uncertainty beats wrong numbers.',  details:['Calibrate scale in Bluebeam per drawing','Count and measure from elevations, per floor','Calculate total areas (sqft/sqm) per system','Identify and count specialty items','Calculate linear footage where applicable','Document all assumptions made where drawings are unclear','THIS IS THE STEP WHERE ASSUMPTIONS CAUSE PROBLEMS'] },
+  { id:8,  phase:'PRICING',       name:'Material Pricing',                  description:'Price materials based on quantities and system selections. Request supplier quotes where needed.',                     timePercent:10, who:'Estimator',                   tools:'Supplier quotes, price lists, Excel',    ai:'medium',    aiNote:'AI can pull from historical pricing databases and flag when current quotes deviate from benchmarks. Requires supplier pricing data to be digitized. Phase 2 opportunity.',                                                                                              details:['Request quotes from suppliers based on material specs','Price primary materials per system','Price accessories, sealants, fasteners, hardware','Apply waste/scrap factors','Factor in freight and delivery'] },
+  { id:9,  phase:'PRICING',       name:'Labor Estimation',                  description:'Estimate shop fabrication hours and/or field installation hours per system type.',                                     timePercent:8,  who:'Senior Estimator',           tools:'Historical rates, experience, Excel',    ai:'medium',    aiNote:'AI can suggest labor rates from historical project data. Requires structured data from past projects — a strong use case once bid history is digitized.',                                                                                                                   details:['Fabrication/shop labor hours per unit type (from historical data)','Field installation labor hours per unit type','Apply crew rates and productivity factors','Factor in site conditions: height, access, equipment needs','Include mobilization/demobilization, protection, cleanup'] },
   { id:10, phase:'QUALIFICATION', name:'Qualifications, Exclusions & Assumptions', description:'Document everything NOT included, everything ASSUMED, and all conditions of the bid. This is where margin is protected.', timePercent:8, who:'Senior Estimator / VP', tools:'Templates (if they exist), experience', ai:'high', aiNote:'Auto-generate qualifications based on what was found/not found in the drawing review. \'No structural drawings provided — embedment design by others.\' \'Performance testing assumed per AAMA 501.\' This is pure domain logic and one of the highest-value AI outputs.', details:['Standard exclusions: scaffolding, hoisting, structural steel, fireproofing','Scope exclusions: items marked \'by others\' or outside trade scope','Assumptions: where drawings were unclear, state what was assumed','Missing information flags: \'no elevations provided for East façade\'','Performance assumptions with specific standards referenced','Schedule assumptions: delivery timelines from approved submittals','Commercial terms: payment, bonding, insurance, warranty scope','THIS IS WHERE MARGIN IS PROTECTED OR LOST'] },
-  { id:11, phase:'ASSEMBLY', name:'Bid Assembly & Pricing Roll-Up', description:'Combine material + labor + overhead + profit + contingency into final bid number. Format per GC requirements.', timePercent:5, who:'Estimator', tools:'Excel, bid form', ai:'low', aiNote:'Mostly spreadsheet math. Automatable but the real value was created in the steps above.', details:['Roll up material costs by system','Roll up labor costs (shop + field)','Apply overhead, profit margin, contingency','Include bonding, insurance costs','Format bid per GC\'s required format / bid form','Prepare alternates and unit prices if requested'] },
-  { id:12, phase:'REVIEW', name:'Internal Review & Sign-Off', description:'Senior review of the complete bid package before submission.', timePercent:3, who:'VP / Chief Estimator', tools:'Manual review', ai:'medium', aiNote:'AI can cross-reference bid against historical benchmarks ($/sqft for similar project types) and flag outliers. Powerful once bid history exists.', details:['Cross-check quantities against drawing review','Validate pricing against current market rates','Review qualifications for completeness','Competitiveness check: does this bid win?','Final sign-off'] },
-  { id:13, phase:'SUBMIT', name:'Bid Submission', description:'Package and submit by deadline.', timePercent:1, who:'Estimator', tools:'Email, bid portals', ai:'low', aiNote:'Administrative.', details:['Final formatting and packaging','Submit by deadline via required channel','Confirm receipt'] },
-  { id:14, phase:'POST-BID', name:'Post-Bid Follow-Up & Negotiation', description:'Answer GC questions, scope clarifications, negotiate, value engineer.', timePercent:4, who:'Senior Estimator / VP', tools:'Phone, email', ai:'low', aiNote:'Human relationship work. AI can prepare comparison documents but negotiation is human.', details:['Respond to GC scope clarification questions','Provide value engineering alternatives','Negotiate pricing and terms','Track bid status and follow up'] },
-  { id:15, phase:'POST-BID', name:'Handoff to Design & Production', description:'If won: transfer all scope, pricing, qualifications, and assumptions to the execution team.', timePercent:2, who:'Estimator → Design Lead / PM', tools:'Meetings, documents (often unstructured)', ai:'medium', aiNote:'A structured AI-generated handoff package from the bid data reduces the #1 source of downstream errors: information lost in the transition from estimating to execution.', details:['Transfer scope definition and system selections','Share all qualifications and assumptions','Provide quantities and pricing breakdown','Identify open items or risks','This is where information commonly gets lost between teams'] }
+  { id:11, phase:'ASSEMBLY',      name:'Bid Assembly & Pricing Roll-Up',    description:'Combine material + labor + overhead + profit + contingency into final bid number.',                                    timePercent:5,  who:'Estimator',                   tools:'Excel, bid form',                        ai:'low',       aiNote:'Mostly spreadsheet math. Automatable but the real value was created in the steps above.',                                                                                                                                                                                details:['Roll up material costs by system','Roll up labor costs (shop + field)','Apply overhead, profit margin, contingency','Include bonding, insurance costs','Format bid per GC\'s required format / bid form','Prepare alternates and unit prices if requested'] },
+  { id:12, phase:'REVIEW',        name:'Internal Review & Sign-Off',        description:'Senior review of the complete bid package before submission.',                                                          timePercent:3,  who:'VP / Chief Estimator',       tools:'Manual review',                          ai:'medium',    aiNote:'AI can cross-reference bid against historical benchmarks ($/sqft for similar project types) and flag outliers. Powerful once bid history exists.',                                                                                                                        details:['Cross-check quantities against drawing review','Validate pricing against current market rates','Review qualifications for completeness','Competitiveness check: does this bid win?','Final sign-off'] },
+  { id:13, phase:'SUBMIT',        name:'Bid Submission',                    description:'Package and submit by deadline.',                                                                                        timePercent:1,  who:'Estimator',                   tools:'Email, bid portals',                     ai:'low',       aiNote:'Administrative.',                                                                                                                                                                                                                                                       details:['Final formatting and packaging','Submit by deadline via required channel','Confirm receipt'] },
+  { id:14, phase:'POST-BID',      name:'Post-Bid Follow-Up & Negotiation',  description:'Answer GC questions, scope clarifications, negotiate, value engineer.',                                                timePercent:4,  who:'Senior Estimator / VP',      tools:'Phone, email',                           ai:'low',       aiNote:'Human relationship work. AI can prepare comparison documents but negotiation is human.',                                                                                                                                                                               details:['Respond to GC scope clarification questions','Provide value engineering alternatives','Negotiate pricing and terms','Track bid status and follow up'] },
+  { id:15, phase:'POST-BID',      name:'Handoff to Design & Production',    description:'If won: transfer all scope, pricing, qualifications, and assumptions to the execution team.',                          timePercent:2,  who:'Estimator → Design Lead / PM', tools:'Meetings, documents (often unstructured)', ai:'medium',  aiNote:'A structured AI-generated handoff package from the bid data reduces the #1 source of downstream errors: information lost in the transition from estimating to execution.',                                                                                               details:['Transfer scope definition and system selections','Share all qualifications and assumptions','Provide quantities and pricing breakdown','Identify open items or risks','This is where information commonly gets lost between teams'] }
 ];
 
 const DIVISIONS = [
-  { icon:'🪟', name:'Glazing / Curtain Wall', systems:'Curtain wall, storefront, window wall, entrances', spec:'Division 08: Openings', complexity:'System classification (unitized vs stick), thermal break requirements, structural performance tiers' },
-  { icon:'🧱', name:'Cladding / Rainscreen', systems:'Metal panels, ACM, fiber cement, terracotta, stone', spec:'Division 07: Thermal & Moisture Protection', complexity:'Substrate conditions, attachment systems, joint design, panel layout/optimization' },
-  { icon:'🏠', name:'Roofing', systems:'BUR, modified bitumen, single-ply (TPO/PVC/EPDM), metal', spec:'Division 07: Thermal & Moisture Protection', complexity:'Existing conditions assessment, slope/drainage, penetrations, warranty tiers' },
-  { icon:'💧', name:'Waterproofing', systems:'Below-grade membrane, plaza deck, foundation, tunnel', spec:'Division 07: Thermal & Moisture Protection', complexity:'Substrate prep, termination details, protection board, drainage systems' },
-  { icon:'🏗️', name:'Prefabrication (PrimeFab)', systems:'Panelized wall assemblies, prefab building envelope', spec:'Multiple divisions depending on assembly', complexity:'Multi-trade coordination within panel, logistics/sequencing, connection design' }
+  { icon:'🪟', name:'Glazing / Curtain Wall',       systems:'Curtain wall, storefront, window wall, entrances',           spec:'Division 08: Openings',                          complexity:'System classification (unitized vs stick), thermal break requirements, structural performance tiers' },
+  { icon:'🧱', name:'Cladding / Rainscreen',         systems:'Metal panels, ACM, fiber cement, terracotta, stone',         spec:'Division 07: Thermal & Moisture Protection',     complexity:'Substrate conditions, attachment systems, joint design, panel layout/optimization' },
+  { icon:'🏠', name:'Roofing',                       systems:'BUR, modified bitumen, single-ply (TPO/PVC/EPDM), metal',   spec:'Division 07: Thermal & Moisture Protection',     complexity:'Existing conditions assessment, slope/drainage, penetrations, warranty tiers' },
+  { icon:'💧', name:'Waterproofing',                 systems:'Below-grade membrane, plaza deck, foundation, tunnel',       spec:'Division 07: Thermal & Moisture Protection',     complexity:'Substrate prep, termination details, protection board, drainage systems' },
+  { icon:'🏗️', name:'Prefabrication / Panelized Envelope', systems:'Panelized wall assemblies, prefab building envelope', spec:'Multiple divisions depending on assembly',       complexity:'Multi-trade coordination within panel, logistics/sequencing, connection design' }
 ];
 
 let openStep = null;
@@ -566,7 +925,7 @@ STEPS.forEach(s => {
   seg.style.cssText = `width:${s.timePercent}%;background:${ai.bg};color:${ai.text};`;
   seg.title = `${s.name} — ${s.timePercent}%`;
   seg.textContent = s.timePercent >= 5 ? s.timePercent + '%' : '';
-  seg.onclick = () => toggleStep(s.id);
+  seg.onclick = () => { switchTab('process'); setTimeout(() => toggleStep(s.id), 50); };
   bar.appendChild(seg);
 });
 
@@ -575,7 +934,6 @@ const list = document.getElementById('steps-list');
 STEPS.forEach(s => {
   const ai = AI[s.ai];
   const wrapper = document.createElement('div');
-
   const row = document.createElement('div');
   row.className = 'step-row';
   row.id = 'row-' + s.id;
@@ -588,7 +946,6 @@ STEPS.forEach(s => {
     <div class="step-who">${s.who}</div>
     <div class="step-pct" style="color:${ai.text}">${s.timePercent}%</div>
   `;
-
   const detail = document.createElement('div');
   detail.className = 'step-detail';
   detail.id = 'detail-' + s.id;
@@ -598,7 +955,7 @@ STEPS.forEach(s => {
     <div class="detail-grid">
       <div>
         <div class="detail-label">What Happens</div>
-        ${s.details.map(d => `<div class="detail-item">${d}</div>`).join('')}
+        ${s.details.map(d => `<div class="detail-item">→ ${d}</div>`).join('')}
       </div>
       <div>
         <div class="detail-label">AI Opportunity — ${ai.label}</div>
@@ -607,13 +964,12 @@ STEPS.forEach(s => {
       </div>
     </div>
   `;
-
   wrapper.appendChild(row);
   wrapper.appendChild(detail);
   list.appendChild(wrapper);
 });
 
-// Calculate percentages
+// Calculate percentages for 80/20
 const scopeTime = STEPS.filter(s => s.phase === 'SCOPE' || s.phase === 'QUALIFICATION').reduce((a,s) => a + s.timePercent, 0);
 const takeoffTime = STEPS.filter(s => s.phase === 'TAKEOFF').reduce((a,s) => a + s.timePercent, 0);
 const highTime = STEPS.filter(s => s.ai === 'high').reduce((a,s) => a + s.timePercent, 0);
@@ -621,45 +977,53 @@ document.getElementById('scope-pct').textContent = scopeTime + '%';
 document.getElementById('takeoff-pct').textContent = takeoffTime + '%';
 document.getElementById('pricing-pct').textContent = (100 - scopeTime - takeoffTime) + '%';
 
+// Build ROI Matrix
+const qColors = {
+  now:   { bg:'#16A34A', text:'#15803D', chip:'#DCFCE7', chipBorder:'#16A34A' },
+  build: { bg:'#3B82F6', text:'#1E40AF', chip:'#EFF6FF', chipBorder:'#3B82F6' },
+  later: { bg:'#CA8A04', text:'#A16207', chip:'#FEF9C3', chipBorder:'#CA8A04' },
+  skip:  { bg:'#DC2626', text:'#B91C1C', chip:'#FEE2E2', chipBorder:'#DC2626' }
+};
+STEPS.forEach(s => {
+  const m = MATRIX[s.id];
+  if (!m) return;
+  const c = qColors[m.q];
+  const container = document.getElementById('q-' + m.q);
+  if (!container) return;
+  const chip = document.createElement('div');
+  chip.className = 'q-step-chip';
+  chip.style.cssText = `background:${c.chip};border:1px solid ${c.chipBorder};color:${c.text};`;
+  chip.title = `Step ${s.id}: ${s.name} — ${m.reason}`;
+  chip.innerHTML = `<span class="q-step-num" style="background:${c.bg}">${s.id}</span>${s.name}`;
+  container.appendChild(chip);
+});
+
 // Build AI map
-function buildMapSection(containerId, filter, bgColor, borderColor, textColor, numBg) {
-  const container = document.getElementById(containerId);
-  STEPS.filter(s => s.ai === filter).forEach(s => {
-    const div = document.createElement('div');
-    div.className = 'map-row';
-    div.style.cssText = `background:${bgColor};border:1px solid ${borderColor};`;
-    div.innerHTML = `
-      <div class="map-num" style="background:${numBg}">${s.id}</div>
-      <div>
-        <div class="map-name">${s.name}</div>
-        <div class="map-note" style="color:${textColor}">${s.aiNote}</div>
-        ${filter === 'difficult' ? `<div class="map-v1-approach"><strong>V1 approach:</strong> Extract what CAN be identified with confidence. For everything else: flag explicitly for manual verification. Transparent uncertainty beats wrong numbers.</div>` : ''}
-      </div>
-      <div class="map-pct" style="color:${textColor}">${s.timePercent}%</div>
-    `;
-    container.appendChild(div);
-  });
-}
-buildMapSection('map-high', 'high', '#DCFCE7', '#16A34A', '#15803D', '#16A34A');
-buildMapSection('map-difficult', 'map-difficult', 'difficult', '#FEE2E2', '#DC2626', '#B91C1C', '#DC2626');
-// fix - redo difficult
+document.getElementById('map-high').innerHTML = '';
 document.getElementById('map-difficult').innerHTML = '';
+document.getElementById('map-medium').innerHTML = '';
+
+STEPS.filter(s => s.ai === 'high').forEach(s => {
+  const div = document.createElement('div');
+  div.className = 'map-row';
+  div.style.cssText = 'background:#DCFCE7;border:1px solid #16A34A;';
+  div.innerHTML = `<div class="map-num" style="background:#16A34A">${s.id}</div><div><div class="map-name">${s.name}</div><div class="map-note" style="color:#15803D">${s.aiNote}</div></div><div class="map-pct" style="color:#15803D">${s.timePercent}%</div>`;
+  document.getElementById('map-high').appendChild(div);
+});
 STEPS.filter(s => s.ai === 'difficult').forEach(s => {
   const div = document.createElement('div');
   div.className = 'map-row';
   div.style.cssText = 'background:#FEE2E2;border:1px solid #DC2626;';
-  div.innerHTML = `
-    <div class="map-num" style="background:#DC2626">${s.id}</div>
-    <div>
-      <div class="map-name">${s.name}</div>
-      <div class="map-note" style="color:#B91C1C">${s.aiNote}</div>
-      <div class="map-v1-approach"><strong>V1 approach:</strong> Extract what CAN be identified with confidence. For everything else: flag explicitly for manual verification. Transparent uncertainty beats wrong numbers.</div>
-    </div>
-    <div class="map-pct" style="color:#B91C1C">${s.timePercent}%</div>
-  `;
+  div.innerHTML = `<div class="map-num" style="background:#DC2626">${s.id}</div><div><div class="map-name">${s.name}</div><div class="map-note" style="color:#B91C1C">${s.aiNote}</div><div class="map-v1-approach"><strong>V1 approach:</strong> Extract what CAN be identified with confidence. For everything else: flag explicitly for manual verification. Transparent uncertainty beats wrong numbers.</div></div><div class="map-pct" style="color:#B91C1C">${s.timePercent}%</div>`;
   document.getElementById('map-difficult').appendChild(div);
 });
-buildMapSection('map-medium', 'medium', '#FEF9C3', '#CA8A04', '#A16207', '#CA8A04');
+STEPS.filter(s => s.ai === 'medium').forEach(s => {
+  const div = document.createElement('div');
+  div.className = 'map-row';
+  div.style.cssText = 'background:#FEF9C3;border:1px solid #CA8A04;';
+  div.innerHTML = `<div class="map-num" style="background:#CA8A04">${s.id}</div><div><div class="map-name">${s.name}</div><div class="map-note" style="color:#A16207">${s.aiNote}</div></div><div class="map-pct" style="color:#A16207">${s.timePercent}%</div>`;
+  document.getElementById('map-medium').appendChild(div);
+});
 
 document.getElementById('map-total-high').textContent = `Total addressable time: ${highTime}% of estimator effort → ~${Math.round(highTime/100*8)} hrs saved per bid on an 8-hour bid`;
 
@@ -669,7 +1033,7 @@ STEPS.forEach(s => {
   const ai = AI[s.ai];
   const chip = document.createElement('div');
   chip.className = 'workflow-chip';
-  chip.style.cssText = `background:${ai.bg};border-color:${ai.border};color:${ai.text};flex:${Math.max(s.timePercent,3)} 0 0`;
+  chip.style.cssText = `background:${ai.bg};border-color:${ai.border};color:${ai.text};`;
   chip.textContent = `${s.id}. ${s.name}`;
   chipsContainer.appendChild(chip);
 });
@@ -681,7 +1045,7 @@ DIVISIONS.forEach(d => {
   card.className = 'division-card';
   card.innerHTML = `
     <div class="division-icon">${d.icon}</div>
-    <div>
+    <div style="flex:1">
       <div class="division-name">${d.name}</div>
       <div class="division-grid">
         <div><div class="division-field-label">Systems</div><div class="division-field-val">${d.systems}</div></div>
