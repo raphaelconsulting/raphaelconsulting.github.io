@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raphael Consulting — Rami Rofaeil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #EE0000;
+    --black: #1a1a1a;
+    --dark: #2d2d2d;
+    --mid: #555555;
+    --light: #888888;
+    --border: #E5E7EB;
+    --bg: #FAFAF8;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--black);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes lineGrow {
+    from { width: 0; }
+    to   { width: 48px; }
+  }
+
+  .reveal { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+  .reveal-1 { animation-delay: 0.1s; }
+  .reveal-2 { animation-delay: 0.25s; }
+  .reveal-3 { animation-delay: 0.4s; }
+  .reveal-4 { animation-delay: 0.55s; }
+  .reveal-5 { animation-delay: 0.7s; }
+  .reveal-6 { animation-delay: 0.85s; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(250, 250, 248, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    gap: 1px;
+  }
+  .wordmark-r {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+  .wordmark-c {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--black);
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--mid);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--red); }
+
+  .nav-cta {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--red);
+    padding: 10px 20px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.88; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle grid texture */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  /* Red accent bar left */
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 120px;
+    left: 0;
+    width: 4px;
+    height: calc(100% - 200px);
+    background: var(--red);
+    opacity: 0.15;
+  }
+
+  .hero-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-block {
+    margin-bottom: 56px;
+  }
+  .quote-mark {
+    font-size: 64px;
+    line-height: 0.6;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: block;
+    opacity: 0.4;
+  }
+  .quote-text {
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 560px;
+    border-left: 2px solid var(--red);
+    padding-left: 20px;
+  }
+  .quote-attr {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--light);
+    margin-top: 12px;
+    padding-left: 22px;
+  }
+
+  .hero-headline {
+    font-size: clamp(36px, 6vw, 68px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 24px;
+  }
+  .hero-headline span {
+    color: var(--red);
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--mid);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn-primary {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--red);
+    padding: 14px 28px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-secondary {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: transparent;
+    padding: 14px 28px;
+    border-radius: 3px;
+    text-decoration: none;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--black); }
+
+  /* ─── STATS STRIP ─── */
+  .stats {
+    background: var(--black);
+    padding: 40px;
+  }
+  .stats-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat-item {
+    padding: 0 32px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat-item:first-child { padding-left: 0; }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 96px 40px;
+  }
+  .section-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .section-title {
+    font-size: clamp(26px, 3.5vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--black);
+    margin-bottom: 20px;
+  }
+
+  .section-body {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--mid);
+    max-width: 560px;
+    line-height: 1.75;
+  }
+
+  /* ─── WHAT I DO ─── */
+  #services { background: var(--white); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 56px;
+    border: 1px solid var(--border);
+  }
+  .service-card {
+    background: var(--white);
+    padding: 36px 32px;
+    transition: background 0.2s;
+  }
+  .service-card:hover { background: var(--bg); }
+  .service-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .service-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--red);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .service-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .service-desc {
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.65;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  #process { background: var(--bg); }
+
+  .process-steps {
+    margin-top: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    background: var(--white);
+  }
+  .process-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .process-step:last-child { border-bottom: none; }
+  .process-step:hover { background: var(--bg); }
+  .step-num-col {
+    padding: 32px 24px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 36px;
+  }
+  .step-num-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--red);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-content {
+    padding: 32px 36px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 8px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.65;
+    max-width: 520px;
+  }
+
+  /* ─── ABOUT ─── */
+  #about { background: var(--white); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-top: 56px;
+    align-items: start;
+  }
+  .about-text p {
+    font-size: 15px;
+    color: var(--mid);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .about-text strong { color: var(--black); font-weight: 600; }
+
+  .credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .credential-item {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .credential-item:last-child { border-bottom: none; }
+  .cred-icon {
+    font-size: 20px;
+    text-align: center;
+  }
+  .cred-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 3px;
+  }
+  .cred-val {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--black);
+    line-height: 1.4;
+  }
+
+  /* ─── CONTACT ─── */
+  #contact {
+    background: var(--black);
+    padding: 96px 40px;
+  }
+  #contact .section-label { color: rgba(255,255,255,0.35); }
+  #contact .section-label::before { background: rgba(255,255,255,0.2); }
+  #contact .section-title { color: var(--white); }
+  #contact .section-body { color: rgba(255,255,255,0.5); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-top: 56px;
+    align-items: start;
+  }
+
+  .contact-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .contact-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    align-items: center;
+  }
+  .contact-item:last-child { border-bottom: none; }
+  .contact-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+  .contact-val {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+  }
+  .contact-val a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-val a:hover { color: var(--red); }
+
+  .contact-cta-box {
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .contact-cta-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  .contact-cta-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .contact-cta-body {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.65;
+  }
+  .btn-primary-light {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    padding: 14px 28px;
+    border-radius: 3px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+    align-self: flex-start;
+  }
+  .btn-primary-light:hover { background: var(--bg); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #111;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-word {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .footer-r {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+  .footer-c {
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+  .footer-copy {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    section { padding: 64px 20px; }
+    #contact { padding: 64px 20px; }
+    footer { padding: 24px 20px; }
+    .stats { padding: 32px 20px; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .stat-item { padding: 0; border-right: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .process-step { grid-template-columns: 60px 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-headline { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wordmark">
+    <span class="wordmark-r">Raphael</span>
+    <span class="wordmark-c">Consulting</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">How It Works</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:rami@raphaelconsulting.ca" class="nav-cta">Get In Touch</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+
+    <div class="quote-block reveal reveal-1">
+      <div class="quote-text">
+        "We don't rise to the level of our expectations — we fall to the level of our systems."
+      </div>
+      <div class="quote-attr">— James Clear, Atomic Habits</div>
+    </div>
+
+    <h1 class="hero-headline reveal reveal-2">
+      4x Scale.<br>
+      Not <span>4x</span> Headcount.
+    </h1>
+
+    <p class="hero-sub reveal reveal-3">
+      Through systems, AI, and automations built specifically for the AEC.
+    </p>
+
+    <div class="hero-actions reveal reveal-4">
+      <a href="#contact" class="btn-primary">Book a Discovery Call</a>
+      <a href="#services" class="btn-secondary">See How It Works</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat-item reveal reveal-1">
+      <div class="stat-num">50%</div>
+      <div class="stat-label">Production capacity increase in 6 months</div>
+    </div>
+    <div class="stat-item reveal reveal-2">
+      <div class="stat-num">158%</div>
+      <div class="stat-label">Of annual sales target — below budget on labor</div>
+    </div>
+    <div class="stat-item reveal reveal-3">
+      <div class="stat-num">14→6</div>
+      <div class="stat-label">Week lead time reduction in 4 months</div>
+    </div>
+    <div class="stat-item reveal reveal-4">
+      <div class="stat-num">15+</div>
+      <div class="stat-label">Years in façade, curtain wall & building envelope</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div class="section-label reveal reveal-1">What I Do</div>
+    <h2 class="section-title reveal reveal-2">Your operation, systematized.<br>Then automated.</h2>
+    <p class="section-body reveal reveal-3">Most specialty contractors scale by adding people. The ones who win scale by building systems that multiply the people they already have.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-icon">⚙️</span>
+        <div class="service-num">01</div>
+        <div class="service-name">Execution Operating System</div>
+        <div class="service-desc">Weekly cadence, decision rhythms, accountability loops, and visibility dashboards. The operating infrastructure your business needs to stop running on instinct.</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🤖</span>
+        <div class="service-num">02</div>
+        <div class="service-name">AI & Automation</div>
+        <div class="service-desc">AI-powered estimating workflows, design review automation, and intelligent agents that do the repetitive work — so your senior people focus on judgment calls, not data entry.</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">📋</span>
+        <div class="service-num">03</div>
+        <div class="service-name">Process & SOPs</div>
+        <div class="service-desc">Process maps, standard work, RACI, and a knowledge hub your team actually uses. No more tribal knowledge. No more everything in one person's head.</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">📊</span>
+        <div class="service-num">04</div>
+        <div class="service-name">Portfolio & Capacity Planning</div>
+        <div class="service-desc">Scheduling, resource allocation, throughput planning, and WIP visibility. Know where your capacity is going before projects are already behind.</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🏗️</span>
+        <div class="service-num">05</div>
+        <div class="service-name">VDC / BIM Implementation</div>
+        <div class="service-desc">Design-to-fabrication workflows, BIM360/ACC ecosystems, modeling standards, and the training to make adoption stick across your team.</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🧠</span>
+        <div class="service-num">06</div>
+        <div class="service-name">Technology Stack</div>
+        <div class="service-desc">M365, SharePoint, Procore, Jira, and the platforms that run your business — properly configured, governed, and actually adopted by your team.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-inner">
+    <div class="section-label reveal reveal-1">How It Works</div>
+    <h2 class="section-title reveal reveal-2">From chaos to<br>operating system.</h2>
+    <p class="section-body reveal reveal-3">Every engagement starts with understanding before recommending. The SCALE framework — Systemize, Consolidate, Automate, Leverage, Evaluate — gives every client a structured path from where they are to where they need to be.</p>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num-col"><div class="step-num-badge">1</div></div>
+        <div class="step-content">
+          <div class="step-title">Discovery — Map the current state</div>
+          <div class="step-desc">Structured interviews with your key people. Process walkthroughs. Artifact collection. The goal: understand exactly what's breaking, what's at risk, and what's working before touching anything.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num-col"><div class="step-num-badge">2</div></div>
+        <div class="step-content">
+          <div class="step-title">Prioritize — Find the 20% that unlocks 80%</div>
+          <div class="step-desc">A pain prioritization matrix that ranks every identified problem by impact and effort. You see exactly where to invest first for the fastest return — no guessing, no generic recommendations.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num-col"><div class="step-num-badge">3</div></div>
+        <div class="step-content">
+          <div class="step-title">Build — Systemize, then automate</div>
+          <div class="step-desc">Document the process first. Then automate what's repetitive. Then layer AI where it multiplies output. In that order — always. AI on top of chaos creates faster chaos.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num-col"><div class="step-num-badge">4</div></div>
+        <div class="step-content">
+          <div class="step-title">Embed — Make it stick</div>
+          <div class="step-desc">The difference between Raphael Consulting and a typical engagement is that I'm embedded, not advisory. Systems only work when the team owns them. That's what the handoff is designed for.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label reveal reveal-1">About</div>
+    <h2 class="section-title reveal reveal-2">Operator first.<br>Consultant second.</h2>
+
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm Rami Rofaeil — 15+ years building and running operations inside specialty subcontractors in façades, curtain wall, GFRC, and building envelope. I've been the GM with P&L accountability. I've led design organizations, built ERP systems from scratch, and delivered AI programs inside companies that had never heard of a custom GPT.</p>
+        <p>I started Raphael Consulting because the problems I saw at every company I worked in — <strong>no documented processes, estimating that lives in one person's head, technology that nobody uses, and teams that grow faster than their systems</strong> — are the same problems everywhere in this industry.</p>
+        <p>The solution isn't more consultants writing reports. It's an operator who has done the work, embedded inside your business, building the systems that let you scale without adding headcount for every problem.</p>
+        <a href="#contact" class="btn-primary" style="margin-top:8px">Let's Talk</a>
+      </div>
+
+      <div class="credentials">
+        <div class="credential-item">
+          <div class="cred-icon">🏭</div>
+          <div>
+            <div class="cred-label">Former Role</div>
+            <div class="cred-val">General Manager, P&L Owner — Comfab Aluminum / Toro Group</div>
+          </div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-icon">🏗️</div>
+          <div>
+            <div class="cred-label">Former Role</div>
+            <div class="cred-val">Director of Design & Technology — Building Blocks Facades (US)</div>
+          </div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-icon">📈</div>
+          <div>
+            <div class="cred-label">Proven Result</div>
+            <div class="cred-val">50% production capacity increase in 6 months</div>
+          </div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-icon">⚡</div>
+          <div>
+            <div class="cred-label">Proven Result</div>
+            <div class="cred-val">Lead time: 14 weeks → 6 weeks in 4 months</div>
+          </div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-icon">🎓</div>
+          <div>
+            <div class="cred-label">Education</div>
+            <div class="cred-val">B.Sc. Architectural Engineering + CEO Global Leadership Program</div>
+          </div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-icon">📍</div>
+          <div>
+            <div class="cred-label">Location</div>
+            <div class="cred-val">Mississauga, ON — Serving Canada & US remotely</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title">Ready to build<br>the operating system?</h2>
+    <p class="section-body">Every engagement starts with a 60-minute discovery call. No pitch deck. Just two operators comparing notes on where the real problems are.</p>
+
+    <div class="contact-grid">
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-label">Email</div>
+          <div class="contact-val"><a href="mailto:rami@raphaelconsulting.ca">rami@raphaelconsulting.ca</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">Phone</div>
+          <div class="contact-val"><a href="tel:4167708983">416.770.8983</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">LinkedIn</div>
+          <div class="contact-val"><a href="https://linkedin.com/in/rrofaeil" target="_blank">linkedin.com/in/rrofaeil</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">Based In</div>
+          <div class="contact-val">Mississauga, ON — Canada & US</div>
+        </div>
+      </div>
+
+      <div class="contact-cta-box">
+        <div>
+          <div class="contact-cta-label">Start Here</div>
+          <div class="contact-cta-title">Book a Discovery Call</div>
+          <div class="contact-cta-body">A 60-minute conversation to understand where your operation is today and where the highest-leverage opportunities are. No obligation. Just clarity.</div>
+        </div>
+        <a href="mailto:rami@raphaelconsulting.ca?subject=Discovery Call — Raphael Consulting" class="btn-primary-light">Book the Call</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-word">
+    <span class="footer-r">Raphael</span>
+    <span class="footer-c">Consulting</span>
+  </div>
+  <div class="footer-copy">© 2026 Raphael Consulting — raphaelconsulting.ca</div>
+</footer>
+
+</body>
+</html>
